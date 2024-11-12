@@ -1,0 +1,83 @@
+conky.config = {
+    alignment = 'top_left',
+    background = false,
+    border_width = 1,
+    cpu_avg_samples = 2,
+    default_color = 'white',
+    default_outline_color = 'white',
+    default_shade_color = 'white',
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    use_xft = true,
+    font = 'Roboto Mono:size=11',
+    gap_x = 20,
+    gap_y = 50,
+    minimum_height = 100,
+    minimum_width = 350,
+    maximum_width = 300,
+    net_avg_samples = 2,
+    no_buffers = true,
+    out_to_console = false,
+    out_to_stderr = false,
+    extra_newline = false,
+    own_window = true,
+    own_window_class = 'Conky',
+    own_window_type = 'desktop',
+    own_window_transparent = false,
+    own_window_argb_visual = true,
+    own_window_colour = '171717',
+    own_window_argb_value = 180,
+    border_inner_margin = 10,
+    stippled_borders = 0,
+    update_interval = 0.5,
+    double_buffer = true,
+    uppercase = false,
+    use_spacer = 'none',
+    show_graph_scale = false,
+    show_graph_range = false,
+    color1 = '#009e5a', 
+    color2 = '#00d17a',
+    color3 = '#940000', 
+    color4 = '#fde910',
+    color5 = '#00e600'
+    }
+conky.text = [[
+${color}${voffset 4}${font GE Inspira:size=36}${alignc}${time %l}:${time %M} ${time %p}${font}${color}
+${color}${voffset 4}${font GE Inspira:size=12}${alignc}${time %A}, ${time %e} ${time %B}, ${time %Y}${font}${color}
+${color5}${voffset 5}S Y S T E M ${hr 2}
+${color5}${voffset 8}Hostname:${color} ${alignr}${nodename}
+${color5}Distro:${color}${alignr}$sysname ${alignr}${execi 6000 lsb_release -a | grep 'Description'|awk {'print $3, $4, $5'}}
+${color5}Kernel:${color}${alignr}${exec uname} ${exec uname -r}
+${color5}Uptime:${color} ${alignr}${uptime}
+${color5}${voffset 5}B A T T E R Y ${hr 2}
+${color5}Battery charge:${color} ${battery_percent BAT1}% ${battery_bar 10 BAT1}
+${color5}${if_match ${battery_percent BAT1} < 16}${color3}Please charge, time left: ${color}${battery_time BAT1}${else}${if_match ${battery_percent BAT1} < 100}${if_match "${exec cat /sys/class/power_supply/BAT1/status}" == "Charging"}Full charge in: ${color}${battery_time BAT1}${else}Until discharge: ${color}${battery_time BAT1}${endif}${else}Fully charged${endif}${endif}
+${color5}${voffset 5}P R O C E S S O R S  ${hr 2}${font}${color}
+${color5}CPU Freq:${color} $alignr${freq}MHz
+${color5}CPU Temp:${color} $alignr${execi 10 sensors | grep 'Core 0' | awk '{print $3}' | sed -e "s/^[0-9]*$/&/;t" | sed -e "s/^74.*$/\x03\x07${color3}&\x00/" | sed -e "s/^75.*$/\x03\x33${color2}&\x00/" | sed -e "s/^95.*$/\x03\x31${color1}&\x00/" | sed -e "s/^100.*$/\x03\x05${color4}&\x00/"}
+${color5}History:${color} ${alignr}${cpugraph 8,100}
+${color5}${offset 30}CPU Core 1:${color} ${alignr}${offset -100}${cpu cpu1}% ${cpubar cpu1}
+${color5}${offset 30}CPU Core 2:${color} ${alignr}${offset -100}${cpu cpu2}% ${cpubar cpu2}
+${color5}${offset 30}CPU Core 3:${color} ${alignr}${offset -100}${cpu cpu3}% ${cpubar cpu3}
+${color5}${offset 30}CPU Core 4:${color} ${alignr}${offset -100}${cpu cpu4}% ${cpubar cpu4}
+${color5}Top Processes${goto 222}cpu%${goto 274}mem%${color}
+${voffset 4}     1  -  ${top name 1}${alignr}${goto 170} ${goto 222}${top cpu 1} ${goto 274}${top mem 1}
+     2  -  ${top name 2}${alignr} ${goto 222}${top cpu 2} ${goto 274}${top mem 2}
+     3  -  ${top name 3}${alignr} ${goto 222}${top cpu 3} ${goto 274}${top mem 3}
+${color5}${font Roboto:size=10}M E M O R Y   ${hr 2}${font}${color}
+${color5}RAM: ${color}${alignr}${offset -100}${mem} / ${memmax} ${membar}
+${color5}Swap:${color} ${alignr}${offset -100}${swap} / ${swapmax} ${swapbar}
+${color5}Top Processes${goto 222}cpu%${goto 274}mem%${color}
+${voffset 4}     1  -  ${top_mem name 1}${alignr}${goto 170} ${goto 222}${top_mem cpu 1} ${goto 274}${top_mem mem 1}
+     2  -  ${top_mem name 2}${alignr}${goto 170} ${goto 222}${top_mem cpu 2} ${goto 274}${top_mem mem 2}
+     3  -  ${top_mem name 3}${alignr}${goto 170} ${goto 222}${top_mem cpu 3} ${goto 274}${top_mem mem 3}
+${color5}${voffset 5}S T O R A G E ${hr 2}
+${color5}/: $color${alignr}${offset -100}${fs_used /}/${fs_size /} ${fs_bar 6 /}
+${color5}/home: $color${alignr}${offset -100}${fs_used /home}/${fs_size /home} ${fs_bar /home}
+${color5}${voffset 5}N E T W O R K ${hr 2}
+${color5}Eth Up:${color} ${alignr}${offset -10$}${upspeed enp6s0}${alignr}${upspeedgraph enp6s0 8,100}
+${color5}Eth Down:${color} ${alignr}${offset -10$}${downspeed enp6s0}${alignr}${downspeedgraph enp6s0 8,100}
+${color5}Public IP: $color${alignr}${exec curl -s https://api.ipify.org}
+]]
